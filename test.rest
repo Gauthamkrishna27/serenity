@@ -1,0 +1,15 @@
+###
+POST http://localhost:3000/api/book
+Content-Type: application/json
+
+{
+
+  "first-name": "John",
+  "last-name": "Doe",
+  "email": "john@example.com",
+  "phone": "1234567890",
+  "address": "123 Main St",
+  "room-type": "Deluxe Suite",
+  "check-in": "2021-01-01",
+  "check-out": "2021-01-02"
+}
