@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Serenity Haven Hotel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Montserrat", sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 24px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 4px 0;
+        }
+
+        .nav-menu a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-menu a:hover:before {
+            left: 100%;
+        }
+
+        .nav-menu a:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: #3498db;
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-left: 4px solid #3498db;
+        }
+
+        .nav-menu i {
+            margin-right: 10px;
+            width: 20px;
+            color: #3498db;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px 30px;
+            width: calc(100% - 250px);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .header h1 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 28px;
+            color: white;
+        }
+
+        .user-info {
+            color: #ecf0f1;
+            font-weight: 500;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .recent-bookings {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .recent-bookings h2 {
+            color: #2c3e50;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .bookings-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .bookings-table th {
+            background: #f8fafc;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 15px;
+            border-bottom: 2px solid #e1e8ef;
+        }
+
+        .bookings-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e1e8ef;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .bookings-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.confirmed {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status.pending {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status.cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .view-btn {
+            background: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .view-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            margin: 10% auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.3s;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .modal-content h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+
+        /* Enhanced Modal Styles */
+        .modal.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Loading Animation */
+        .loading-animation {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Pulse Animation for Stats */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .stat-card.pulse {
+            animation: pulse 1.5s ease-in-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .bookings-table {
+                font-size: 13px;
+            }
+        }
+
+        /* Add this to your existing animations */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Add these new interactive components */
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .action-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            transform: rotate(0deg);
+            transition: transform 0.5s ease;
+        }
+
+        .action-button:hover::before {
+            transform: rotate(180deg);
+        }
+
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 0 20px auto;
+            display: block;
+        }
+
+        .refresh-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .refresh-btn i {
+            transition: transform 1s ease;
+        }
+
+        .refresh-btn.rotating i {
+            transform: rotate(360deg);
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .loading-overlay i {
+            color: #d4af37;
+        }
+
+        /* Add subtle gold accents to borders */
+        .bookings-table td, 
+        .bookings-table th {
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Enhanced hover effects matching landing page style */
+        .nav-menu a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Serenity Haven</div>
+            <ul class="nav-menu">
+                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> Bookings</a></li>
+                <li><a href="#"><i class="fas fa-bed"></i> Rooms</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Guests</a></li>
+                <li><a href="#"><i class="fas fa-utensils"></i> Restaurant</a></li>
+                <li><a href="#"><i class="fas fa-spa"></i> Spa Services</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Back to Site</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <span>Welcome, Admin</span>
+                </div>
+            </div>
+
+            <!-- Add this button after the header section -->
+            <div style="margin-bottom: 20px; text-align: right;">
+                <button id="refreshData" class="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-button" id="addBooking">
+                    <i class="fas fa-plus"></i> New Booking
+                </button>
+                <button class="action-button" id="generateReport">
+                    <i class="fas fa-file-alt"></i> Generate Report
+                </button>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Total Bookings</h3>
+                    <div class="value">124</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Available Rooms</h3>
+                    <div class="value">45</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Occupied Rooms</h3>
+                    <div class="value">78</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Today's Revenue</h3>
+                    <div class="value">$12,450</div>
+                </div>
+            </div>
+
+            <!-- Recent Bookings Table -->
+            <div class="recent-bookings">
+                <h2>Recent Bookings</h2>
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Guest Name</th>
+                            <th>Room Type</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#BK001</td>
+                            <td>John Smith</td>
+                            <td>Deluxe Suite</td>
+                            <td>2024-03-15</td>
+                            <td>2024-03-18</td>
+                            <td><span class="status confirmed">Confirmed</span></td>
+                            <td><button class="action-btn view-btn">View Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>#BK002</td>
+                            <td>Emma Wilson</td>
+                            <td>Executive Room</td>
+                            <td>2024-03-16</td>
+                            <td>2024-03-20</td>
+                            <td><span class="status pending">Pending</span></td>
+                            <td><button class="action-btn view-btn">View Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>#BK003</td>
+                            <td>Michael Brown</td>
+                            <td>Presidential Suite</td>
+                            <td>2024-03-17</td>
+                            <td>2024-03-19</td>
+                            <td><span class="status cancelled">Cancelled</span></td>
+                            <td><button class="action-btn view-btn">View Details</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Details Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Booking Details</h2>
+            <!-- Modal content will be dynamically populated -->
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById("bookingModal");
+        const viewButtons = document.querySelectorAll(".view-btn");
+        const closeBtn = document.querySelector(".close");
+
+        // Add loading animation before data updates
+        function showLoading() {
+            const loading = document.createElement('div');
+            loading.className = 'loading-animation';
+            document.querySelector('.recent-bookings').prepend(loading);
+            loading.style.display = 'block';
+            setTimeout(() => {
+                loading.style.display = 'none';
+            }, 1000);
+        }
+
+        // Animate stats when they update
+        function updateStats() {
+            const stats = document.querySelectorAll('.stat-card');
+            stats.forEach(stat => {
+                const currentValue = parseInt(stat.querySelector('.value').textContent);
+                const newValue = currentValue + Math.floor(Math.random() * 10);
+                stat.classList.add('pulse');
+                setTimeout(() => {
+                    stat.querySelector('.value').textContent = newValue;
+                    stat.classList.remove('pulse');
+                }, 1500);
+            });
+        }
+
+        // Enhanced modal functionality
+        viewButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                modal.style.display = "block";
+                setTimeout(() => {
+                    modal.classList.add('active');
+                }, 10);
+            });
+        });
+
+        closeBtn.addEventListener("click", () => {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        });
+
+        // Auto-update stats periodically
+        setInterval(updateStats, 10000); // Updates every 10 seconds
+
+        // Add hover effect to table rows
+        const tableRows = document.querySelectorAll('.bookings-table tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseover', () => {
+                row.style.transform = 'scale(1.01)';
+                row.style.transition = 'transform 0.3s';
+            });
+            row.addEventListener('mouseout', () => {
+                row.style.transform = 'scale(1)';
+            });
+        });
+
+        // Add smooth transitions when switching sections
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if(e.currentTarget.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    showLoading();
+                }
+            });
+        });
+
+        // Add interactive features for stats cards
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.background = `linear-gradient(145deg, #ffffff, #f8f9fa)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.background = 'white';
+            });
+        });
+
+        // Add interactive header effect
+        const header = document.querySelector('.header');
+        header.addEventListener('mousemove', (e) => {
+            const rect = header.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            
+            header.style.background = `linear-gradient(${x * 360}deg, #2c3e50, #3498db)`;
+        });
+
+        // Quick Actions Functionality
+        document.getElementById('addBooking').addEventListener('click', function() {
+            modal.style.display = "block";
+            modal.classList.add('active');
+        });
+
+        document.getElementById('generateReport').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-file-alt"></i> Generate Report';
+                alert('Report generated successfully!');
+            }, 2000);
+        });
+
+        // Add this CSS for the rotating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rotating {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .rotating i {
+                animation: rotating 1s linear infinite;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Table Row Hover Effect
+        const tableRows = document.querySelectorAll('.bookings-table tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mousemove', (e) => {
+                const rect = row.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                row.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(52, 152, 219, 0.1), transparent)`;
+            });
+
+            row.addEventListener('mouseleave', () => {
+                row.style.background = 'none';
+            });
+        });
+
+        // Sample data arrays for demonstration
+        const guestNames = ['John Smith', 'Emma Wilson', 'Michael Brown', 'Sarah Johnson', 'David Lee', 'Lisa Anderson'];
+        const roomTypes = ['Deluxe Suite', 'Executive Room', 'Presidential Suite', 'Standard Room', 'Ocean View Suite'];
+        const statuses = ['confirmed', 'pending', 'cancelled'];
+
+        // Function to generate random date within next 30 days
+        function getRandomDate() {
+            const start = new Date();
+            const end = new Date();
+            end.setDate(end.getDate() + 30);
+            return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+                .toISOString().split('T')[0];
+        }
+
+        // Function to generate random booking data
+        function generateBookingData() {
+            const checkIn = getRandomDate();
+            const checkOut = new Date(checkIn);
+            checkOut.setDate(checkOut.getDate() + Math.floor(Math.random() * 5) + 1);
+            
+            return {
+                bookingId: '#BK' + Math.floor(Math.random() * 1000).toString().padStart(3, '0'),
+                guestName: guestNames[Math.floor(Math.random() * guestNames.length)],
+                roomType: roomTypes[Math.floor(Math.random() * roomTypes.length)],
+                checkIn: checkIn,
+                checkOut: checkOut.toISOString().split('T')[0],
+                status: statuses[Math.floor(Math.random() * statuses.length)]
+            };
+        }
+
+        // Function to update table with new data
+        function updateTable() {
+            const tbody = document.querySelector('.bookings-table tbody');
+            tbody.innerHTML = '';
+
+            for(let i = 0; i < 3; i++) {
+                const booking = generateBookingData();
+                const row = `
+                    <tr>
+                        <td>${booking.bookingId}</td>
+                        <td>${booking.guestName}</td>
+                        <td>${booking.roomType}</td>
+                        <td>${booking.checkIn}</td>
+                        <td>${booking.checkOut}</td>
+                        <td><span class="status ${booking.status}">${booking.status}</span></td>
+                        <td><button class="action-btn view-btn">View Details</button></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            }
+        }
+
+        // Function to update statistics
+        function updateStats() {
+            const stats = document.querySelectorAll('.stat-card .value');
+            stats.forEach(stat => {
+                if(stat.textContent.includes('$')) {
+                    // Update revenue with random amount between 10000 and 20000
+                    stat.textContent = '$' + (Math.floor(Math.random() * 10000) + 10000);
+                } else {
+                    // Update other stats with random numbers
+                    const currentValue = parseInt(stat.textContent);
+                    const newValue = Math.floor(Math.random() * 50) + 50;
+                    stat.textContent = newValue;
+                }
+            });
+        }
+
+        // Refresh button functionality
+        const refreshBtn = document.getElementById('refreshData');
+        refreshBtn.addEventListener('click', function() {
+            // Add rotating animation to button
+            this.classList.add('rotating');
+            
+            // Disable button during refresh
+            this.disabled = true;
+
+            // Show loading state
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.innerHTML = '<i class="fas fa-spinner fa-spin fa-2x"></i>';
+            document.querySelector('.main-content').appendChild(loadingOverlay);
+            
+            setTimeout(() => {
+                loadingOverlay.classList.add('active');
+            }, 0);
+
+            // Simulate API call delay
+            setTimeout(() => {
+                // Update data
+                updateStats();
+                updateTable();
+
+                // Remove loading state
+                loadingOverlay.classList.remove('active');
+                setTimeout(() => {
+                    loadingOverlay.remove();
+                }, 300);
+
+                // Reset button
+                this.classList.remove('rotating');
+                this.disabled = false;
+            }, 1500);
+        });
+
+        // Reattach event listeners for view buttons after table update
+        function reattachViewButtonListeners() {
+            const viewButtons = document.querySelectorAll('.view-btn');
+            viewButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    modal.style.display = "block";
+                    setTimeout(() => {
+                        modal.classList.add('active');
+                    }, 10);
+                });
+            });
+        }
+
+        // Call reattachViewButtonListeners after table updates
+        const observer = new MutationObserver(() => {
+            reattachViewButtonListeners();
+        });
+
+        observer.observe(document.querySelector('.bookings-table tbody'), {
+            childList: true
+        });
+    </script>
+</body>
+</html> 
