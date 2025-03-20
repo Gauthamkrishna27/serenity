@@ -1,15 +1,18 @@
-###
-POST http://localhost:3000/api/book
+
+### Test /api/book - Create a new booking
+POST http://localhost:5000/api/book
 Content-Type: application/json
 
 {
-
-  "first-name": "John",
-  "last-name": "Doe",
-  "email": "john@example.com",
-  "phone": "1234567890",
-  "address": "123 Main St",
-  "room-type": "Deluxe Suite",
-  "check-in": "2021-01-01",
-  "check-out": "2021-01-02"
+    "first-name": "John",
+    "last-name": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "123-456-7890",
+    "address": "123 Main Street, Anytown, CA 12345",
+    "room-type": "Deluxe",
+    "check-in": "2023-06-15",
+    "check-out": "2023-06-20"
 }
+
+###
+GET http://localhost:5000/api/manage/booking

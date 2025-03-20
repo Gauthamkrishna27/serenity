@@ -4,7 +4,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import db from './db.js';
 import bookapi from './routes/bookingendpoint.js';
-
+import manageapi from './routes/mangeapi.js';
 const app = express();
 
 
@@ -32,11 +32,12 @@ app.get('/manage', (req, res) => {
 
 app.use('/api/book',bookapi) 
 
+app.use('/api/manage',manageapi)
 
 
 
 
 
-app.listen(3000, () => {
+app.listen(5000, () => {
   console.log('Server is running on port 3000');
 });
